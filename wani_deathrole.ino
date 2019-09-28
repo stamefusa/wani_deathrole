@@ -3,6 +3,10 @@
 #define POST_STOP 3
 #define STOP 9
 
+#define LOTATE_PORT 3
+#define PWM_PORT 5
+#define SWITCH_PORT 7
+
 int val1 = 0, pre1 = 0, diff1 = 0, pdiff1 = 0;
 int val2 = 0, pre2 = 0, diff2 = 0, pdiff2 = 0;
 int switch1 = 0, pre_switch1 = 0;
@@ -17,9 +21,8 @@ char str;
 
 void setup() {
 
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(7, INPUT_PULLUP);
+  pinMode(LOTATE_PORT, OUTPUT);
+  pinMode(SWITCH_PORT, INPUT_PULLUP);
   Serial.begin(9600);
 
 }
@@ -54,7 +57,7 @@ void loop() {
     driveMotor(true);
     Serial.println(millis() - start_time);
 
-    if (millis() - start_time > 10000) {
+    if (millis() - start_time > 1000) {
       Serial.println("auto stop.");
       mode = STOP;
     }
@@ -73,30 +76,26 @@ void loop() {
 
 void stopMotor()
 {
-  digitalWrite(3, LOW);
-  digitalWrite(4, LOW);
-  analogWrite(5, 0);
+  digitalWrite(LOTATE_PORT, LOW);
+  analogWrite(PWM_PORT, 0);
 }
 
 void driveMotor(boolean flag)
 {
+  digitalWrite(LOTATE_PORT, HIGH);
   if (flag == true) {
-    digitalWrite(3, HIGH);
-    digitalWrite(4, LOW);
+    analogWrite(PWM_PORT, 250);
   }
   else {
-    digitalWrite(3, LOW);
-    digitalWrite(4, HIGH);
+    analogWrite(PWM_PORT, -250);
   }
-
-  analogWrite(5, 250);
 }
 
 boolean isStart()
 {
   boolean dst = false;
 
-  switch1 = digitalRead(7);
+  switch1 = digitalRead(SWITCH_PORT);
   if (pre_switch1 == 0 && switch1 == 1) {
     dst = true;
   }
