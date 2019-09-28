@@ -3,9 +3,9 @@
 #define POST_STOP 3
 #define STOP 9
 
-#define LOTATE_PORT 3
-#define PWM_PORT 5
-#define SWITCH_PORT 7
+#define LOTATE_PORT 8
+#define PWM_PORT 9
+#define SWITCH_PORT 4
 
 int val1 = 0, pre1 = 0, diff1 = 0, pdiff1 = 0;
 int val2 = 0, pre2 = 0, diff2 = 0, pdiff2 = 0;
@@ -57,7 +57,7 @@ void loop() {
     driveMotor(true);
     Serial.println(millis() - start_time);
 
-    if (millis() - start_time > 1000) {
+    if (millis() - start_time > 10000) {
       Serial.println("auto stop.");
       mode = STOP;
     }
